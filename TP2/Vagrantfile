@@ -1,0 +1,84 @@
+# Variables
+node_1_Disque = './node1.vdi'
+node_2_Disque = './node2.vdi'
+node_3_Disque = './node3.vdi'
+node_4_Disque = './node4.vdi'
+
+Vagrant.configure("2") do |config|
+  # Configuration commune à toutes les machines
+  config.vm.box = "centos7-dock"
+  config.vm.box_check_update = false # désactive les updates auto qui peuvent ralentir le lancement de la machine
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false # désactive la fenêtre console de VirtualBox
+    vb.memory = 512
+
+  end 
+  
+  # Config une première VM "node1"
+  config.vm.define "node1" do |node1|
+    node1.vm.network "private_network", ip: "192.168.56.2"
+ 
+  
+    node1.vm.provider "virtualbox" do |vb|
+      # Crée le disque, uniquement s'il nexiste pas déjà
+      unless File.exist?(node_1_Disque)
+        vb.customize ['createhd', '--filename', node_1_Disque, '--variant', 'Fixed', '--size', 3 * 1024]
+      end
+
+      # Attache le disque à la VM
+      vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', node_1_Disque]
+    end
+
+    # node1.vm.provision "shell", path: "./node1.sh"
+  
+  end
+  
+  # Config une deuxième VM "node2"
+  config.vm.define "node2" do |node2|
+    node2.vm.network "private_network", ip: "192.168.56.3"
+ 
+  
+    node2.vm.provider "virtualbox" do |vb|
+      # Crée le disque, uniquement s'il nexiste pas déjà
+      unless File.exist?(node_2_Disque)
+        vb.customize ['createhd', '--filename', node_2_Disque, '--variant', 'Fixed', '--size', 3 * 1024]
+      end
+
+      # Attache le disque à la VM
+      vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', node_2_Disque]
+    end
+
+
+    #node2.vm.provision "shell", path: node2.sh"
+
+   
+  end
+
+  # Config une troisième VM "node3"
+  config.vm.define "node3" do |node3|
+    node3.vm.network "private_network", ip: "192.168.56.4"
+ 
+  
+    node3.vm.provider "virtualbox" do |vb|
+      # Crée le disque, uniquement s'il nexiste pas déjà
+      unless File.exist?(node_3_Disque)
+        vb.customize ['createhd', '--filename', node_3_Disque, '--variant', 'Fixed', '--size', 3 * 1024]
+      end
+
+      unless File.exist?(node_4_Disque)
+        vb.customize ['createhd', '--filename', node_4_Disque, '--variant', 'Fixed', '--size', 3 * 1024]
+      end
+
+      # Attache le disque à la VM
+      vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', node_3_Disque]
+      # Attache le disque à la VM
+      vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', node_4_Disque]
+    end
+
+    # node3.vm.provision "shell", path: "./node3.sh"
+
+   
+  end
+end
