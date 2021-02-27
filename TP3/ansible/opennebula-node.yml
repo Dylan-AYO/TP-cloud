@@ -1,0 +1,19 @@
+- name: install opennebula client
+  hosts: test
+  become: true
+
+  tasks:
+  - name: Add epel repo
+    yum:
+      name: epel-release
+      state: present
+
+  - name: install opennebula
+    yum:
+      name: opennebula-node-kvm
+      state: present
+
+  - name: restart libvirtd
+    service:
+      name: libvirtd
+      state: restart
