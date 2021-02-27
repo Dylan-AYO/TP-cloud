@@ -1,0 +1,39 @@
+hosts.ini:
+[test]
+10.100.100.11
+
+opennebula.yml:
+- name: install opennebula
+  hosts: test
+  become: true
+
+  tasks:
+  - name: Add epel repo
+    yum:
+      name: epel-release
+      state: present
+
+  - name: install opennebula
+    yum:
+      name: opennebula-server
+      state: present
+
+  - name: install opennebula sunstone
+    yum:
+      name: opennebula-sunstone
+      state: present
+
+  - name: install opennebula sunstone
+    yum:
+      name: opennebula-ruby
+      state: present
+
+  - name: install opennebula sunstone
+    yum:
+      name: opennebula-gate
+      state: present
+
+  - name: install opennebula sunstone
+    yum:
+      name: opennebula-flow
+      state: present
