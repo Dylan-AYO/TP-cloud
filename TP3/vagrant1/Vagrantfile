@@ -1,0 +1,26 @@
+# Variables
+Vagrant.configure("2") do |config|
+  # Configuration commune à toutes les machines
+  config.vm.box = "centos/ansible"
+  config.vm.box_check_update = false # désactive les updates auto qui peuvent ralentir le lancement de la machine
+  config.vm.synced_folder ".", "/vagrant", disabled: true 
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false # désactive la fenêtre console de VirtualBox
+    vb.memory = 512
+  end 
+  
+  # Config une première VM "node1"
+  config.vm.define "node1" do |node1|
+    node1.vm.network "private_network", ip: "10.100.100.11"
+    # node1.vm.provision "shell", path: "./node1.sh"
+  end
+  
+  # Config une deuxième VM "node2"
+  config.vm.define "node2" do |node2|
+    node2.vm.network "private_network", ip: "10.100.100.12"
+    #node2.vm.provision "shell", path: node2.sh"
+  end
+  
+end
+
