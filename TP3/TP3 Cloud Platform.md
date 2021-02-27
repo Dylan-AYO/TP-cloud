@@ -1,5 +1,8 @@
 # TP3 : Cloud Platform
 
+## Vagrant
+on créer une box vagrant avec ansible d'installé qu'on utile pour créer les VMs
+
 ## Mise en place
 
 ### 1. Frontend
